@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Для тебя 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#ffe3ec;--bg2:#ffd0e0;--card:#fffafc;--text:#7a2c4a;--muted:#b0637f;
+  --accent:#ff6b9a;--accent2:#ff8fb3;--env:#ffb3cc;--env2:#ff9dbd;--paper:#fffdf8;
+  --shadow:rgba(255,107,154,.28);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg1:#2b1420;--bg2:#3d1a2c;--card:#4a2236;--text:#ffe3ec;--muted:#e7a6bf;
+    --accent:#ff7aa5;--accent2:#ff8fb3;--env:#c8587f;--env2:#b04a6f;--paper:#fff3f6;--shadow:rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg1:#2b1420;--bg2:#3d1a2c;--card:#4a2236;--text:#ffe3ec;--muted:#e7a6bf;
+  --accent:#ff7aa5;--accent2:#ff8fb3;--env:#c8587f;--env2:#b04a6f;--paper:#fff3f6;--shadow:rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:'Comfortaa',system-ui,sans-serif;color:var(--text);
+  background:linear-gradient(160deg,var(--bg1),var(--bg2));overflow-x:hidden;
+  display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.hearts span{position:absolute;bottom:-40px;opacity:.5;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+.wrap{position:relative;z-index:1;width:100%;max-width:440px;text-align:center}
+.step{display:none;animation:pop .6s ease both}
+.step.on{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:28px;padding:32px 24px;box-shadow:0 12px 40px var(--shadow)}
+.emoji{font-size:44px;display:block;margin-bottom:8px;animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.count{font-size:13px;color:var(--muted);margin-bottom:10px}
+h1{font-family:'Pacifico',cursive;font-weight:400;font-size:28px;margin:0 0 20px;line-height:1.35}
+input{width:100%;padding:14px 18px;border-radius:18px;border:2px solid var(--accent2);background:transparent;
+  color:var(--text);font:inherit;font-size:16px;outline:none;text-align:center}
+input::placeholder{color:var(--muted);opacity:.7}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--shadow)}
+button.btn{margin-top:18px;padding:13px 32px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font:inherit;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 6px 18px var(--shadow);transition:transform .15s}
+button.btn:active{transform:scale(.95)}
+.reaction{min-height:24px;margin-top:14px;color:var(--muted);font-size:14px}
+.hint{margin-top:26px;font-size:15px;color:var(--muted);animation:beat 2s ease-in-out infinite}
+/* envelope */
+.env{position:relative;width:260px;height:170px;margin:30px auto 0;cursor:pointer;filter:drop-shadow(0 12px 24px var(--shadow));
+  animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.env .back{position:absolute;inset:0;background:var(--env2);border-radius:10px}
+.env .front{position:absolute;inset:0;border-radius:10px;
+  background:linear-gradient(to top right,var(--env) 50%,transparent 50%) left/50% 100% no-repeat,
+             linear-gradient(to top left,var(--env) 50%,transparent 50%) right/50% 100% no-repeat}
+.env .flap{position:absolute;left:0;right:0;top:0;height:95px;background:var(--env2);
+  clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .6s ease;filter:brightness(1.05)}
+.env .heart{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font-size:46px;z-index:3;transition:opacity .3s;
+  animation:beat 1.4s ease-in-out infinite}
+.env.open{animation:none}
+.env.open .flap{transform:rotateX(180deg)}
+.env.open .heart{opacity:0}
+/* letter */
+.overlay{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;padding:20px;
+  background:rgba(60,10,30,.45);backdrop-filter:blur(4px)}
+.overlay.on{display:flex}
+.letter{background:var(--paper);color:#7a2c4a;width:100%;max-width:460px;max-height:86vh;overflow-y:auto;border-radius:22px;
+  padding:34px 26px;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:slide .9s ease both;line-height:1.75;font-size:15.5px}
+@keyframes slide{from{opacity:0;transform:translateY(120px) scale(.9)}to{opacity:1;transform:none}}
+.letter h2{font-family:'Pacifico',cursive;font-weight:400;text-align:center;margin:0 0 18px;font-size:26px;color:#ff6b9a}
+.letter p{margin:0 0 14px}
+.letter .sign{text-align:right;font-family:'Pacifico',cursive;color:#ff6b9a;font-size:20px;margin-top:20px}
+.close{display:block;margin:18px auto 0;background:none;border:2px solid #ff8fb3;color:#ff6b9a;border-radius:999px;
+  padding:9px 24px;font:inherit;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+
+<div class="wrap">
+  <div class="step on" id="s1">
+    <div class="card">
+      <span class="emoji">🥰</span>
+      <div class="count">вопрос 1 из 2</div>
+      <h1>Где была наша первая встреча?</h1>
+      <input id="a1" type="text" placeholder="напиши ответ здесь…" autocomplete="off">
+      <div class="reaction" id="r1"></div>
+      <button class="btn" data-next="s2" data-from="a1" data-react="r1">Дальше 💕</button>
+    </div>
+  </div>
+
+  <div class="step" id="s2">
+    <div class="card">
+      <span class="emoji">💞</span>
+      <div class="count">вопрос 2 из 2</div>
+      <h1>Какое твоё самое любимое наше воспоминание?</h1>
+      <input id="a2" type="text" placeholder="напиши ответ здесь…" autocomplete="off">
+      <div class="reaction" id="r2"></div>
+      <button class="btn" data-next="s3" data-from="a2" data-react="r2">Дальше 💕</button>
+    </div>
+  </div>
+
+  <div class="step" id="s3">
+    <h1 style="margin-bottom:0">Арина, для тебя есть кое-что…</h1>
+    <div class="env" id="env">
+      <div class="back"></div>
+      <div class="front"></div>
+      <div class="flap"></div>
+      <div class="heart">❤️</div>
+    </div>
+    <div class="hint" id="hint">нажми, чтобы открыть 💌</div>
+  </div>
+</div>
+
+<div class="overlay" id="ov">
+  <div class="letter">
+    <h2>Арина, моя любимая</h2>
+    <p>Знаешь, иногда я ловлю себя на том, что просто улыбаюсь без причины, и потом понимаю: это я подумал о тебе. Ты как будто поселилась в каждой моей мысли, и мне там очень уютно с тобой.</p>
+    <p>Я хочу сказать спасибо. За твой смех, от которого у меня теплеет внутри. За то, что рядом с тобой можно быть собой — смешным, уставшим, глупым, настоящим. За твоё терпение, твою доброту и за все те мелочи, которые ты делаешь, даже не замечая, как много они для меня значат.</p>
+    <p>С тобой самые обычные дни превращаются в маленький праздник: чай вечером, глупые шутки, прогулки, молчание на двоих — всё это и есть моё настоящее счастье. Я бы не променял ни одну такую минуту ни на что на свете.</p>
+    <p>Я не всегда умею красиво говорить о чувствах, но хочу, чтобы ты знала: ты — мой дом, моё спокойствие и моя самая тёплая радость. Когда мне тяжело, мне достаточно вспомнить о тебе, и всё становится чуточку легче.</p>
+    <p>Спасибо, что выбрала меня. Спасибо, что остаёшься рядом. Я обещаю беречь тебя, заботиться, смешить и обнимать так крепко, как только смогу. Впереди у нас ещё столько всего: места, где мы побываем, мечты, которые сбудутся, и вечера, которые мы запомним навсегда.</p>
+    <p>Я так сильно тебя люблю. Сегодня, завтра и всегда. 💖</p>
+    <div class="sign">Твой навсегда ♡</div>
+    <button class="close" id="close">закрыть 💗</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var hc=document.getElementById('hearts'),em=['💗','💖','💕','🌸','✨'];
+  for(var i=0;i<16;i++){
+    var s=document.createElement('span');
+    s.textContent=em[i%em.length];
+    s.style.left=(Math.random()*100)+'%';
+    s.style.fontSize=(14+Math.random()*18)+'px';
+    s.style.animationDuration=(9+Math.random()*10)+'s';
+    s.style.animationDelay=(-Math.random()*14)+'s';
+    hc.appendChild(s);
+  }
+  var cute=['Ой, как мило! 🥹','Запомню это навсегда 💕','Это так тепло 🌷','Вот и я так думаю 😊'],ci=0;
+  document.querySelectorAll('.btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      var inp=document.getElementById(b.dataset.from),r=document.getElementById(b.dataset.react);
+      if(!inp.value.trim()){
+        r.textContent='Напиши хоть пару слов, пожалуйста 🥺';
+        inp.focus();return;
+      }
+      r.textContent=cute[ci++%cute.length];
+      b.disabled=true;
+      setTimeout(function(){
+        b.closest('.step').classList.remove('on');
+        document.getElementById(b.dataset.next).classList.add('on');
+      },900);
+    });
+  });
+  document.querySelectorAll('input').forEach(function(inp){
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){inp.closest('.card').querySelector('.btn').click();}
+    });
+  });
+  var env=document.getElementById('env'),ov=document.getElementById('ov');
+  env.addEventListener('click',function(){
+    if(env.classList.contains('open'))return;
+    env.classList.add('open');
+    document.getElementById('hint').style.visibility='hidden';
+    setTimeout(function(){ov.classList.add('on');},800);
+  });
+  document.getElementById('close').addEventListener('click',function(){
+    ov.classList.remove('on');
+    env.classList.remove('open');
+    document.getElementById('hint').style.visibility='visible';
+  });
+})();
+</script>
+</body>
+</html>
